@@ -1,0 +1,38 @@
+import numpy as np
+import pandas as pd
+import os
+
+
+class DataUtils:
+
+    def __init__(self, data_dir, window, horizon):
+
+        self.window = window
+        self.horizon = horizon
+        self.data_dir = data_dir
+        self.train_x, self.train_y = self.get_samples('train')
+        self.train_x = self.train_x.reshape((self.train_x.shape[0], self.train_x.shape[1], 1))
+        self.val_x, self.val_y = self.get_samples('validation')
+        self.val_x = self.val_x.reshape((self.val_x.shape[0], self.val_x.shape[1], 1))
+        self.test_x, self.test_y = self.get_samples('test')
+        self.test_x = self.test_x.reshape((self.test_x.shape[0], self.test_x.shape[1], 1))
+
+    def get_samples(self, type):
+
+        data_path = os.path.join(self.data_dir, '{}.csv'.format(type))
+        data = pd.read_csv(data_path)
+        data = data['SpConductivity'].values
+
+        X, y = list(), list()
+        in_start = 0
+        for _ in range(len(data)):
+            in_end = in_start + self.window
+            out_end = in_end + self.horizon
+            if out_end <= len(data):
+                X.append(data[in_start:in_end])
+                y.append(data[in_end:out_end])
+            in_start += 1
+        X = np.array(X)
+        y = np.array(y)
+
+        return (X, y)
