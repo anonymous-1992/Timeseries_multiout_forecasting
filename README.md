@@ -1,3 +1,3 @@
 # multiout_forecasting
-## time series direct multiple output forecasting 
-## Tensorflow keras
+[_] time series direct multiple output forecasting 
+[_] Tensorflow keras
