@@ -11,11 +11,10 @@ class DataUtils:
         self.horizon = horizon
         self.data_dir = data_dir
         self.train_x, self.train_y = self.get_samples('train')
-        self.train_x = self.train_x.reshape((self.train_x.shape[0], self.train_x.shape[1], 1))
+
         self.val_x, self.val_y = self.get_samples('validation')
-        self.val_x = self.val_x.reshape((self.val_x.shape[0], self.val_x.shape[1], 1))
+
         self.test_x, self.test_y = self.get_samples('test')
-        self.test_x = self.test_x.reshape((self.test_x.shape[0], self.test_x.shape[1], 1))
 
     def get_samples(self, type):
 
