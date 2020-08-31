@@ -245,7 +245,7 @@ def main():
 
     global Data
 
-    Data = data_util.DataUtils(params.data_dir, params.window, params.horizon)
+    Data = data_util.DataUtils(params)
 
     Data.train_x = Data.train_x.reshape((Data.train_x.shape[0], Data.train_x.shape[1], 1))
 

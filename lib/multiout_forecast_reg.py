@@ -1,5 +1,4 @@
 import argparse
-
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Lasso
@@ -120,8 +119,9 @@ def main():
     parser.add_argument('--window', type=int, default=16)
     parser.add_argument('--horizon', type=int, default=4)
     params = parser.parse_args()
+
     global Data
-    Data = DataUtils(params.data_dir, params.window, params.horizon)
+    Data = DataUtils(params)
 
     # test GP
     parser.add_argument('--kernel_ls', default=[WhiteKernel() + DotProduct(), RBF(), Matern(), RationalQuadratic()])
