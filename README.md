@@ -6,6 +6,6 @@ Comparing the performance of statistic, regression and deep learning models for 
 
 ## Requirements
 
- Python 3 and above
+- Python 3 and above
 
- Keras tensorflow 
+- Keras tensorflow 
