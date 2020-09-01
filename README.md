@@ -16,4 +16,7 @@ Comparing the performance of statistic, regression and deep learning models for 
 # clone project
 git clone https://github.com/sepidehkoohfar/Timeseries_multiout_forecasting.git
 
+# install dependecies
+
+
 ```
