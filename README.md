@@ -21,6 +21,5 @@ cd Timeseries_multiout_forecasting
 pip install requirement.txt
 
 # run All methods
-chmod +x run.sh
-./run.sh
+bash run.sh
 ```
