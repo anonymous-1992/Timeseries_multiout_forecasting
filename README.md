@@ -2,10 +2,10 @@
 
 ## Methodology
  
-### Comparing the performance of statistics, regression and depp learning models for direct multiple output forecasting
+ Comparing the performance of statistics, regression and depp learning models for direct multiple output forecasting
 
 ## Requirements
 
-### Python 3 and above
+ Python 3 and above
 
-### Keras tensorflow 
+ Keras tensorflow 
