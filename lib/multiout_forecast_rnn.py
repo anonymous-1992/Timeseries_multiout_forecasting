@@ -30,11 +30,67 @@ class DeepModels:
         self.kernels_2_ls = params.n_kernels_2
         self.dropout_ls = params.dropout
         self.name = None
-        self.model = Sequential()
+        self.model = None
+        self.saved_model = None
         self.early_stop = kc.EarlyStopping(monitor='val_loss', patience=20)
 
     def train(self, epoch, kernel_1, kernel_2, dr):
         pass
+
+    def validate(self):
+
+        in_seq, out_seq = Data.val_x, Data.val_y
+
+        labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
+
+        best_val = float("inf")
+
+        for epoch in self.epoch_ls:
+
+            for kernel_1 in self.kernels_1_ls:
+
+                for kernel_2 in self.kernels_2_ls:
+
+                    for dr in self.dropout_ls:
+
+                        self.train(epoch, kernel_1, kernel_2, dr)
+
+                        output = self.model.predict(in_seq)
+
+                        output = np.array(output)
+
+                        predictions = output.reshape(output.shape[0] * output.shape[1], )
+
+                        eval_module = eval_metrics.EvalMetrics(labels, predictions)
+
+                        rmse = eval_module.val_rmse()
+
+                        if rmse < best_val:
+                            best_val = rmse
+                            self.model.save('{}.h5'.format(self.name))
+                            self.saved_model = self.model
+
+    def evaluate(self):
+
+        model = self.saved_model
+
+        in_seq, out_seq = Data.test_x, Data.test_y
+
+        labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
+
+        output = model.model.predict(in_seq)
+
+        output = np.array(output)
+
+        predictions = output.reshape(output.shape[0] * output.shape[1], )
+
+        eval_module = eval_metrics.EvalMetrics(labels, predictions)
+
+        rmse = eval_module.val_rmse()
+        rse = eval_module.val_rse()
+        corr = eval_module.val_corr()
+
+        return rmse, rse, corr
 
 
 class LSTMModel(DeepModels):
@@ -45,6 +101,7 @@ class LSTMModel(DeepModels):
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
+        self.model = Sequential()
         self.model.add(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
         self.model.add(Dense(kernels_2, activation='relu'))
         self.model.add(Dense(self.horizon, activation='linear'))
@@ -74,6 +131,7 @@ class EdLSTMModel(DeepModels):
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
+        self.model = Sequential()
         Data.train_y = Data.train_y.reshape((Data.train_y.shape[0], Data.train_y.shape[1], 1))
         self.model.add(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
         self.model.add(RepeatVector(kernels_2))
@@ -91,6 +149,7 @@ class BiEdLSTMModel(DeepModels):
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
+        self.model = Sequential()
         Data.train_y = Data.train_y.reshape((Data.train_y.shape[0], Data.train_y.shape[1], 1))
         self.model.add(Bidirectional(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2]))))
         self.model.add(RepeatVector(kernels_2))
@@ -107,6 +166,8 @@ class CNNModel(DeepModels):
         super(CNNModel, self).__init__(params)
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
+
+        self.model = Sequential()
         self.model.add(Conv1D(kernels_1, 3, activation='relu', input_shape=(self.horizon, 1)))
         self.model.add(MaxPooling1D(pool_size=2))
         self.model.add(Flatten())
@@ -124,6 +185,7 @@ class GRUModel(DeepModels):
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
+        self.model = Sequential()
         self.model.add(GRU(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
         self.model.add(Dense(kernels_2, activation='relu'))
         self.model.add(Dense(self.horizon, activation='linear'))
@@ -139,6 +201,7 @@ class BiGRUModel(DeepModels):
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
+        self.model = Sequential()
         self.model.add(Bidirectional(GRU(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2]))))
         self.model.add(Dense(kernels_2, activation='relu'))
         self.model.add(Dense(self.horizon, activation='linear'))
@@ -147,97 +210,13 @@ class BiGRUModel(DeepModels):
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
 
 
-def create_model(name, params):
-
-    if name is "LSTM":
-        return LSTMModel(params)
-
-    elif name is "BiLSTM":
-        return BiLSTMModel(params)
-
-    elif name is "EdLSTM":
-        return EdLSTMModel(params)
-
-    elif name is "BiEdLSTM":
-        return BiEdLSTMModel(params)
-
-    elif name is "CNN":
-        return CNNModel(params)
-
-    elif name is "GRU":
-        return GRUModel(params)
-
-    elif name is "BiGRU":
-        return BiGRUModel(params)
-
-
-def validate(params, name):
-
-    ml = create_model(name, params)
-
-    in_seq, out_seq = Data.val_x, Data.val_y
-
-    labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
-
-    best_val = float("inf")
-
-    for epoch in ml.epoch_ls:
-
-        for kernel_1 in ml.kernels_1_ls:
-
-            for kernel_2 in ml.kernels_2_ls:
-
-                for dr in ml.dropout_ls:
-
-                    ml.train(epoch, kernel_1, kernel_2, dr)
-
-                    output = ml.model.predict(in_seq)
-
-                    output = np.array(output)
-
-                    predictions = output.reshape(output.shape[0] * output.shape[1], )
-
-                    eval_module = eval_metrics.EvalMetrics(labels, predictions)
-
-                    rmse = eval_module.val_rmse()
-
-                    if rmse < best_val:
-                        best_val = rmse
-                        ml.model.save('{}.h5'.format(ml.name))
-
-                    ml = create_model(name, params)
-
-
-def evaluate(name):
-
-    model = tf.keras.models.save_model('{}.h5'.format(name))
-
-    in_seq, out_seq = Data.test_x, Data.test_y
-
-    labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
-
-    output = model.model.predict(in_seq)
-
-    output = np.array(output)
-
-    predictions = output.reshape(output.shape[0] * output.shape[1], )
-
-    eval_module = eval_metrics.EvalMetrics(labels, predictions)
-
-    rmse = eval_module.val_rmse()
-    rse = eval_module.val_rse()
-    corr = eval_module.val_corr()
-
-    return rmse, rse, corr
-
-
 def main():
 
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
     parser.add_argument('--n_epoch',  type=list, default=[10, 50, 100, 500, 1000])
     parser.add_argument('--n_kernels_1', type=list, default=[10, 50, 100, 200])
     parser.add_argument('--n_kernels_2', type=list, default=[10, 50, 100])
-    parser.add_argument('--window', type=int, default=16)
+    parser.add_argument('--window', type=int, default=4)
     parser.add_argument('--horizon', type=int, default=4)
     parser.add_argument('--dropout', type=list, default=[0.0, 0.1, 0.3])
     parser.add_argument('--data_dir', default='../data', type=str)
@@ -253,9 +232,13 @@ def main():
 
     Data.test_x = Data.test_x.reshape((Data.test_x.shape[0], Data.test_x.shape[1], 1))
 
-    validate(params, "LSTM")
+    # test LSTM
 
-    rmse, rse, corr = evaluate("LSTM")
+    model = LSTMModel(params)
+
+    model.validate()
+
+    rmse, rse, corr = model.evaluate()
 
     print("test rmse {:5.4f} | test rae {:5.4f} | test corr {:5.4f}".format(rmse, rse, rse))
 
