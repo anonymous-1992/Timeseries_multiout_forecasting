@@ -73,6 +73,19 @@ class VARModel(StatModels):
         self.saved_model = self.model
 
 
+def create_model(params):
+
+    model = None
+    name = params.name
+
+    if name is "ARIMA":
+        model = ARIMAModel(params)
+    elif name is "VAR":
+        model = VARModel(params)
+
+    return model
+
+
 def main():
 
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
@@ -88,11 +101,12 @@ def main():
     parser.add_argument('--p_ls', default=p_values)
     parser.add_argument('--q_ls', default=q_values)
     parser.add_argument('--d_ls', default=d_values)
+    parser.add_argument('--name', type=str, required=True)
     params = parser.parse_args()
 
     # test ARIMA
 
-    model = ARIMAModel(params)
+    model = create_model(params)
     model.validate()
 
     rmse, rse, corr = model.evaluate()

@@ -210,6 +210,28 @@ class BiGRUModel(DeepModels):
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
 
 
+def create_models(params):
+
+    model = None
+    name = params.name
+    if name is "LSTM":
+        model = LSTMModel(params)
+    elif name is "BiLSTM":
+        model = BiLSTMModel(params)
+    elif name is "EdLSTM":
+        model = EdLSTMModel(params)
+    elif name is "BiEdLSTM":
+        model = BiEdLSTMModel(params)
+    elif name is "CNN":
+        model = CNNModel(params)
+    elif name is "GRU":
+        model = GRUModel(params)
+    elif name is "BiGRU":
+        model = BiGRUModel(params)
+
+    return model
+
+
 def main():
 
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
@@ -220,6 +242,7 @@ def main():
     parser.add_argument('--horizon', type=int, default=4)
     parser.add_argument('--dropout', type=list, default=[0.0, 0.1, 0.3])
     parser.add_argument('--data_dir', default='../data', type=str)
+    parser.add_argument('--name', type=str, required=True)
     params = parser.parse_args()
 
     global Data
@@ -232,9 +255,7 @@ def main():
 
     Data.test_x = Data.test_x.reshape((Data.test_x.shape[0], Data.test_x.shape[1], 1))
 
-    # test LSTM
-
-    model = LSTMModel(params)
+    model = create_models(params)
 
     model.validate()
 

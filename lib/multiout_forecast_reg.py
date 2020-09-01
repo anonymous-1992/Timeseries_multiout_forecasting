@@ -113,22 +113,41 @@ class GPModel(RegModels):
                 self.saved_model = self.model
 
 
+def create_model(params):
+
+    name = params.name
+    model = None
+
+    if name is "LR":
+        model = LRModel(params)
+    elif name is "SVR":
+        model = SVRModel(params)
+    elif name is "Lasso":
+        model = LassoModel(params)
+    elif name is "GP":
+        model = GPModel(params)
+
+    return model
+
+
 def main():
+
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
     parser.add_argument('--data_dir', default='../data', type=str)
     parser.add_argument('--window', type=int, default=16)
     parser.add_argument('--horizon', type=int, default=4)
+    parser.add_argument('--kernel_ls', default=[WhiteKernel() + DotProduct(), RBF(), Matern(), RationalQuadratic()])
+    parser.add_argument('--name', type=str, required=True)
     params = parser.parse_args()
 
     global Data
     Data = DataUtils(params)
 
-    # test GP
-    parser.add_argument('--kernel_ls', default=[WhiteKernel() + DotProduct(), RBF(), Matern(), RationalQuadratic()])
-    params_GP = parser.parse_args()
-    gp_model = GPModel(params_GP)
-    gp_model.validate()
-    rmse, rse, corr = gp_model.evaluate()
+    model = create_model(params)
+
+    model.validate()
+
+    rmse, rse, corr = model.evaluate()
 
     print("test rmse {:5.4f} | test rae {:5.4f} | test corr {:5.4f}".format(rmse, rse, rse))
 
