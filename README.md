@@ -10,4 +10,4 @@ Comparing the performance of statistic, regression and deep learning models for 
 
 - Keras tensorflow 
 
-'git clone'
+'' git clone ''
