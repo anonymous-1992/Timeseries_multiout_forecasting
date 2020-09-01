@@ -1,4 +1,11 @@
-# multiout_forecasting
-time series direct multiple output forecasting 
+# Time Series Multiple Output Forecasting
 
-Tensorflow keras
+## Methodology
+ 
+### Comparing the performance of statistics, regression and depp learning models for direct multiple output forecasting
+
+## Requirements
+
+### Python 3 and above
+
+### Keras tensorflow 
