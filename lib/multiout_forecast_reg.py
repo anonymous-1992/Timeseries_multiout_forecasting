@@ -133,7 +133,7 @@ def create_model(params):
 def main():
 
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
-    parser.add_argument('--data_dir', default='../data', type=str)
+    parser.add_argument('--data_dir', default='data', type=str)
     parser.add_argument('--window', type=int, default=16)
     parser.add_argument('--horizon', type=int, default=4)
     parser.add_argument('--kernel_ls', default=[WhiteKernel() + DotProduct(), RBF(), Matern(), RationalQuadratic()])

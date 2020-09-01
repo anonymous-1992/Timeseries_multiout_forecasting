@@ -241,7 +241,7 @@ def main():
     parser.add_argument('--window', type=int, default=4)
     parser.add_argument('--horizon', type=int, default=4)
     parser.add_argument('--dropout', type=list, default=[0.0, 0.1, 0.3])
-    parser.add_argument('--data_dir', default='../data', type=str)
+    parser.add_argument('--data_dir', default='data', type=str)
     parser.add_argument('--name', type=str, required=True)
     params = parser.parse_args()
 

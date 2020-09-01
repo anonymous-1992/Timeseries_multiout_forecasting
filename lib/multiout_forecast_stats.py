@@ -89,7 +89,7 @@ def create_model(params):
 def main():
 
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
-    parser.add_argument('--data_dir', default='../data', type=str)
+    parser.add_argument('--data_dir', default='data', type=str)
     params = parser.parse_args()
 
     global Data
