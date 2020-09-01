@@ -10,4 +10,8 @@ Comparing the performance of statistic, regression and deep learning models for 
 
 - Keras tensorflow 
 
-`<git clone>`
+## How to Run
+
+` # clone project
+git clone https://github.com/sepidehkoohfar/Timeseries_multiout_forecasting.git
+`
