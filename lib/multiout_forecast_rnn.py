@@ -32,7 +32,7 @@ class DeepModels:
         self.name = None
         self.model = None
         self.saved_model = None
-        self.early_stop = kc.EarlyStopping(monitor='val_loss', patience=20)
+        self.early_stop = kc.EarlyStopping(monitor='mse', patience=20)
 
     def train(self, epoch, kernel_1, kernel_2, dr):
         pass
