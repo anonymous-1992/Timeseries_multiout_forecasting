@@ -138,6 +138,7 @@ def main():
     parser.add_argument('--horizon', type=int, default=4)
     parser.add_argument('--kernel_ls', default=[WhiteKernel() + DotProduct(), RBF(), Matern(), RationalQuadratic()])
     parser.add_argument('--name', type=str, required=True)
+    parser.add_argument('--save', type=str, required=True)
     params = parser.parse_args()
 
     global Data
@@ -149,7 +150,9 @@ def main():
 
     rmse, rse, corr = model.evaluate()
 
-    print("test rmse {:5.4f} | test rae {:5.4f} | test corr {:5.4f}".format(rmse, rse, rse))
+    with open(params.save, 'w') as f:
+
+        f.write(f"test rmse {rmse:5.4f} | test rae {rse:5.4f} | test corr {rse:5.4f}")
 
 
 if __name__ == '__main__':

@@ -90,6 +90,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
     parser.add_argument('--data_dir', default='data', type=str)
+    parser.add_argument('--save', type=str, required=True)
     params = parser.parse_args()
 
     global Data
@@ -109,7 +110,9 @@ def main():
 
     rmse, rse, corr = model.evaluate()
 
-    print("test rmse {:5.4f} | test rae {:5.4f} | test corr {:5.4f}".format(rmse, rse, rse))
+    with open(params.save, 'w') as f:
+
+        f.write(f"test rmse {rmse:5.4f} | test rae {rse:5.4f} | test corr {rse:5.4f}")
 
 
 if __name__ == '__main__':
