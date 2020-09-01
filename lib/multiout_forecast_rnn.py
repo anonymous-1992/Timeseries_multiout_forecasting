@@ -11,8 +11,8 @@ from keras.layers import Flatten
 from keras.layers import Bidirectional
 import numpy as np
 import tensorflow as tf
-import lib.dataset as data_util
-import lib.eval_metrics as eval_metrics
+import dataset as data_util
+import eval_metrics as eval_metrics
 tf.keras.backend.set_floatx('float64')
 
 global Data

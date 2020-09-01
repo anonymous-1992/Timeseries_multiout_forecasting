@@ -2,8 +2,8 @@ import argparse
 
 from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.ar_model import AutoReg
-from lib.eval_metrics import EvalMetrics
-from lib.dataset import DataOneD
+from eval_metrics import EvalMetrics
+from dataset import DataOneD
 global Data
 
 

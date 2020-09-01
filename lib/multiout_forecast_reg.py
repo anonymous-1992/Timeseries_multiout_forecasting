@@ -6,8 +6,8 @@ from sklearn.svm import SVR
 from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel, RBF, Matern, RationalQuadratic
 from sklearn.multioutput import RegressorChain
-from lib.eval_metrics import EvalMetrics
-from lib.dataset import DataUtils
+from eval_metrics import EvalMetrics
+from dataset import DataUtils
 global Data
 
 
