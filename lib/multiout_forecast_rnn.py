@@ -97,7 +97,7 @@ class LSTMModel(DeepModels):
 
     def __init__(self, params):
         super(LSTMModel, self).__init__(params)
-        self.name = "lstm"
+        self.name = "LSTM"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
@@ -214,19 +214,19 @@ def create_models(params):
 
     model = None
     name = params.name
-    if name is "LSTM":
+    if name == "LSTM":
         model = LSTMModel(params)
-    elif name is "BiLSTM":
+    elif name == "BiLSTM":
         model = BiLSTMModel(params)
-    elif name is "EdLSTM":
+    elif name == "EdLSTM":
         model = EdLSTMModel(params)
-    elif name is "BiEdLSTM":
+    elif name == "BiEdLSTM":
         model = BiEdLSTMModel(params)
-    elif name is "CNN":
+    elif name == "CNN":
         model = CNNModel(params)
-    elif name is "GRU":
+    elif name == "GRU":
         model = GRUModel(params)
-    elif name is "BiGRU":
+    elif name == "BiGRU":
         model = BiGRUModel(params)
 
     return model

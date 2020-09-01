@@ -118,13 +118,13 @@ def create_model(params):
     name = params.name
     model = None
 
-    if name is "LR":
+    if name == "LR":
         model = LRModel(params)
-    elif name is "SVR":
+    elif name == "SVR":
         model = SVRModel(params)
-    elif name is "Lasso":
+    elif name == "Lasso":
         model = LassoModel(params)
-    elif name is "GP":
+    elif name == "GP":
         model = GPModel(params)
 
     return model

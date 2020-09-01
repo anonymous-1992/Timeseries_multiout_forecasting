@@ -78,9 +78,9 @@ def create_model(params):
     model = None
     name = params.name
 
-    if name is "ARIMA":
+    if name == "ARIMA":
         model = ARIMAModel(params)
-    elif name is "VAR":
+    elif name == "VAR":
         model = VARModel(params)
 
     return model
