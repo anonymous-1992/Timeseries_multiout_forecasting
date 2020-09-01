@@ -2,7 +2,7 @@
 
 ## Methodology
  
- Comparing the performance of statistic, regression and deep learning models for direct multiple output forecasting
+-Comparing the performance of statistic, regression and deep learning models for direct multiple output forecasting
 
 ## Requirements
 
