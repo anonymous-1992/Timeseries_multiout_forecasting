@@ -104,8 +104,6 @@ def main():
     parser.add_argument('--name', type=str, required=True)
     params = parser.parse_args()
 
-    # test ARIMA
-
     model = create_model(params)
     model.validate()
 
