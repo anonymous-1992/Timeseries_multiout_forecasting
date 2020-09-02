@@ -34,13 +34,16 @@ class DeepModels:
         self.saved_model = None
         self.model_output = None
         self.early_stop = kc.EarlyStopping(monitor='mse', patience=20)
+        self.train_x, self.train_y = params.Data.train_x, params.Data.train_y
+        self.test_x, self.test_y = params.Data.test_x, params.Data.test_y
+        self.val_x, self.val_y = params.Data.val_x, params.Data.val_y
 
     def train(self, epoch, kernel_1, kernel_2, dr):
         pass
 
     def validate(self):
 
-        in_seq, out_seq = Data.val_x, Data.val_y
+        in_seq, out_seq = self.val_x, self.val_y
 
         labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
 
@@ -75,7 +78,7 @@ class DeepModels:
 
         model = self.saved_model
 
-        in_seq, out_seq = Data.test_x, Data.test_y
+        in_seq, out_seq = self.test_x, self.test_y
 
         labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
 
@@ -104,13 +107,13 @@ class LSTMModel(DeepModels):
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
         self.model = Sequential()
-        self.model.add(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
+        self.model.add(LSTM(kernels_1, input_shape=(self.train_x.shape[1], self.train_x.shape[2])))
         self.model.add(Dense(kernels_2, activation='relu'))
         self.model.add(Dense(self.horizon, activation='linear'))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-        self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
-        self.model_output = self.model.predict(Data.train_x)
+        self.model.fit(self.train_x, self.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(self.train_x)
 
 
 class BiLSTMModel(DeepModels):
@@ -123,13 +126,13 @@ class BiLSTMModel(DeepModels):
         def train(self, epoch, kernels_1, kernels_2, dropout):
 
             self.model = Sequential()
-            self.model.add(Bidirectional(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2]))))
+            self.model.add(Bidirectional(LSTM(kernels_1, input_shape=(self.train_x.shape[1], self.train_x.shape[2]))))
             self.model.add(Dense(kernels_2, activation='relu'))
             self.model.add(Dense(self.horizon, activation='linear'))
             self.model.add(Dropout(rate=dropout))
             self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-            self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
-            self.model_output = self.model.predict(Data.train_x)
+            self.model.fit(self.train_x, self.train_y, epochs=epoch, callbacks=[self.early_stop])
+            self.model_output = self.model.predict(self.train_x)
 
 
 class EdLSTMModel(DeepModels):
@@ -141,16 +144,16 @@ class EdLSTMModel(DeepModels):
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
-        Data.train_y = Data.train_y.reshape((Data.train_y.shape[0], Data.train_y.shape[1], 1))
+        train_y = self.train_y.reshape((self.train_y.shape[0], self.train_y.shape[1], 1))
         self.model = Sequential()
-        self.model.add(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
+        self.model.add(LSTM(kernels_1, input_shape=(self.train_x.shape[1], self.train_x.shape[2])))
         self.model.add(RepeatVector(kernels_2))
         self.model.add(LSTM(kernels_2, activation='relu', return_sequences=True))
         self.model.add(TimeDistributed(Dense(1, activation='linear')))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-        self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
-        self.model_output = self.model.predict(Data.train_x)
+        self.model.fit(self.train_x, train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(self.train_x)
 
 
 class BiEdLSTMModel(DeepModels):
@@ -163,15 +166,15 @@ class BiEdLSTMModel(DeepModels):
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
         self.model = Sequential()
-        Data.train_y = Data.train_y.reshape((Data.train_y.shape[0], Data.train_y.shape[1], 1))
-        self.model.add(Bidirectional(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2]))))
+        train_y = Data.train_y.reshape((self.train_y.shape[0], self.train_y.shape[1], 1))
+        self.model.add(Bidirectional(LSTM(kernels_1, input_shape=(self.train_x.shape[1], self.train_x.shape[2]))))
         self.model.add(RepeatVector(kernels_2))
         self.model.add(Bidirectional(LSTM(kernels_2, activation='relu', return_sequences=True)))
         self.model.add(TimeDistributed(Dense(1, activation='linear')))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-        self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
-        self.model_output = self.model.predict(Data.train_x)
+        self.model.fit(self.train_x, train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(self.train_x)
 
 
 class CNNModel(DeepModels):
@@ -184,7 +187,7 @@ class CNNModel(DeepModels):
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
         self.model = Sequential()
-        Data.train_y = Data.train_y.reshape((Data.train_y.shape[0], Data.train_y.shape[1], 1))
+        train_y = self.train_y.reshape((self.train_y.shape[0], self.train_y.shape[1], 1))
         self.model.add(Conv1D(kernels_1, 3, activation='relu', input_shape=(self.horizon, 1)))
         self.model.add(MaxPooling1D(pool_size=2))
         self.model.add(Flatten())
@@ -192,8 +195,8 @@ class CNNModel(DeepModels):
         self.model.add(Dense(self.horizon, activation='linear'))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-        self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
-        self.model_output = self.model.predict(Data.train_x)
+        self.model.fit(self.train_x, train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(self.train_x)
 
 
 class GRUModel(DeepModels):
@@ -206,13 +209,13 @@ class GRUModel(DeepModels):
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
         self.model = Sequential()
-        self.model.add(GRU(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
+        self.model.add(GRU(kernels_1, input_shape=(self.train_x.shape[1], self.train_x.shape[2])))
         self.model.add(Dense(kernels_2, activation='relu'))
         self.model.add(Dense(self.horizon, activation='linear'))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-        self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
-        self.model_output = self.model.predict(Data.train_x)
+        self.model.fit(self.train_x, self.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(self.train_x)
 
 
 class BiGRUModel(DeepModels):
@@ -224,18 +227,19 @@ class BiGRUModel(DeepModels):
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
         self.model = Sequential()
-        self.model.add(Bidirectional(GRU(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2]))))
+        self.model.add(Bidirectional(GRU(kernels_1, input_shape=(self.train_x.shape[1], self.train_x.shape[2]))))
         self.model.add(Dense(kernels_2, activation='relu'))
         self.model.add(Dense(self.horizon, activation='linear'))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
-        self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
-        self.model_output = self.model.predict(Data.train_x)
+        self.model.fit(self.train_x, self.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(self.train_x)
 
 
 def create_models(params):
 
     model = None
+
     name = params.name
     if name == "LSTM":
         model = LSTMModel(params)
