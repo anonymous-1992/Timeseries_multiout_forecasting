@@ -34,7 +34,7 @@ class RegModels:
 
     def evaluate(self):
 
-        test_labels = self.test_y.reshpae(self.test_y.shape[0] * self.test_y.shape[1], )
+        test_labels = self.test_y.reshape(self.test_y.shape[0] * self.test_y.shape[1], )
         outputs = self.saved_model.predict(self.test_x)
         outputs = np.array(outputs)
         predictions = outputs.reshape(outputs.shape[0] * outputs.shape[1], )
