@@ -3,6 +3,7 @@ from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.ar_model import AutoReg
 from eval_metrics import EvalMetrics
 from dataset import DataOneD
+import pickle
 global Data
 
 
@@ -18,6 +19,7 @@ class StatModels:
         self.saved_model = None
         self.start = len(self.train)
         self.end = len(self.train) + len(self.test) - 1
+        self.name = None
 
     def validate(self):
         pass
@@ -32,6 +34,11 @@ class StatModels:
 
         return rmse, rse, corr
 
+    def save_model(self):
+        file_name = self.name + "pkl"
+        with open(file_name, 'wb') as file:
+            pickle.dump(self.model, file)
+
 
 class ARIMAModel(StatModels):
 
@@ -41,6 +48,7 @@ class ARIMAModel(StatModels):
         self.p_ls = params.p_ls
         self.q_ls = params.q_ls
         self.d_ls = params.d_ls
+        self.name = "ARIMA"
 
     def validate(self):
         best_value = float("inf")
@@ -64,6 +72,7 @@ class VARModel(StatModels):
     def __init__(self, params):
 
         super(VARModel, self).__init__(params)
+        self.name = "VAR"
 
     def validate(self):
 
@@ -87,7 +96,7 @@ def create_model(params):
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
+    parser = argparse.ArgumentParser(description='statsmodel Time series multi-output forecasting')
     parser.add_argument('--data_dir', default='data', type=str)
     parser.add_argument('--save', type=str, required=True)
     params = parser.parse_args()

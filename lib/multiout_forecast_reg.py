@@ -8,6 +8,7 @@ from sklearn.gaussian_process.kernels import DotProduct, WhiteKernel, RBF, Mater
 from sklearn.multioutput import RegressorChain
 from eval_metrics import EvalMetrics
 from dataset import DataUtils
+import pickle
 global Data
 
 
@@ -21,6 +22,7 @@ class RegModels:
         self.train_output = None
         self.model = None
         self.saved_model = None
+        self.name = None
 
     def train(self):
         pass
@@ -28,6 +30,7 @@ class RegModels:
     def validate(self):
         self.train()
         self.saved_model = self.model
+        self.save_model()
 
     def evaluate(self):
 
@@ -42,11 +45,19 @@ class RegModels:
 
         return rmse, rse, corr
 
+    def save_model(self):
+
+        file_name = self.name + "pkl"
+        with open(file_name, 'wb') as file:
+            pickle.dump(self.model, file)
+
 
 class LRModel(RegModels):
 
     def __init__(self, params):
+
         super(LRModel, self).__init__(params)
+        self.name = "LR"
 
     def train(self):
         self.model = LinearRegression()
@@ -59,6 +70,7 @@ class SVRModel(RegModels):
     def __init__(self, params):
 
         super(SVRModel, self).__init__(params)
+        self.name = "SVR"
 
     def train(self):
         self.model = SVR()
@@ -72,6 +84,7 @@ class LassoModel(RegModels):
     def __init__(self, params):
 
         super(LassoModel, self).__init__(params)
+        self.name = "Lasso"
 
     def train(self):
         self.model = Lasso()
@@ -87,6 +100,7 @@ class GPModel(RegModels):
         super(GPModel, self).__init__(params)
         self.kernel_ls = params.kernel_ls
         self.kernel = None
+        self.name = "GP"
 
     def train(self):
         self.model = GaussianProcessRegressor(kernel=self.kernel)
@@ -114,6 +128,7 @@ class GPModel(RegModels):
                 self.train_output = self.model.predict(self.train_x)
 
 
+
 def create_model(params):
 
     name = params.name
@@ -133,7 +148,7 @@ def create_model(params):
 
 def main():
 
-    parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
+    parser = argparse.ArgumentParser(description='sklearn Time series multi-output forecasting')
     parser.add_argument('--data_dir', default='data', type=str)
     parser.add_argument('--window', type=int, default=16)
     parser.add_argument('--horizon', type=int, default=4)
