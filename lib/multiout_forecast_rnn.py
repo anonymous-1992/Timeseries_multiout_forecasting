@@ -280,6 +280,8 @@ def main():
 
         f.write(f"test rmse {rmse:5.4f} | test rae {rse:5.4f} | test corr {rse:5.4f}")
 
+    f.close()
+
 
 if __name__ == "__main__":
     main()
