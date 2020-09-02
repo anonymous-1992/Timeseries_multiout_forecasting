@@ -1,5 +1,4 @@
 import argparse
-
 from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.ar_model import AutoReg
 from eval_metrics import EvalMetrics
@@ -110,7 +109,7 @@ def main():
 
     rmse, rse, corr = model.evaluate()
 
-    with open(params.save, 'w') as f:
+    with open(params.save, 'a+') as f:
 
         f.write(f"test rmse {rmse:5.4f} | test rae {rse:5.4f} | test corr {rse:5.4f}")
 
