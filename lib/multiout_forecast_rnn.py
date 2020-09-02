@@ -97,6 +97,7 @@ class DeepModels:
 class LSTMModel(DeepModels):
 
     def __init__(self, params):
+
         super(LSTMModel, self).__init__(params)
         self.name = "LSTM"
 
@@ -115,11 +116,14 @@ class LSTMModel(DeepModels):
 class BiLSTMModel(DeepModels):
 
         def __init__(self, params):
+
             super(BiLSTMModel, self).__init__(params)
             self.name = "BiLSTM"
 
         def train(self, epoch, kernels_1, kernels_2, dropout):
-            self.model.add(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
+
+            self.model = Sequential()
+            self.model.add(Bidirectional(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2]))))
             self.model.add(Dense(kernels_2, activation='relu'))
             self.model.add(Dense(self.horizon, activation='linear'))
             self.model.add(Dropout(rate=dropout))
@@ -131,16 +135,17 @@ class BiLSTMModel(DeepModels):
 class EdLSTMModel(DeepModels):
 
     def __init__(self, params):
+
         super(EdLSTMModel, self).__init__(params)
         self.name = "EdLSTM"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
-        self.model = Sequential()
         Data.train_y = Data.train_y.reshape((Data.train_y.shape[0], Data.train_y.shape[1], 1))
+        self.model = Sequential()
         self.model.add(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
         self.model.add(RepeatVector(kernels_2))
-        self.model.add(GRU(kernels_2, activation='relu', return_sequences=True))
+        self.model.add(LSTM(kernels_2, activation='relu', return_sequences=True))
         self.model.add(TimeDistributed(Dense(1, activation='linear')))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
@@ -151,6 +156,7 @@ class EdLSTMModel(DeepModels):
 class BiEdLSTMModel(DeepModels):
 
     def __init__(self, params):
+
         super(BiEdLSTMModel, self).__init__(params)
         self.name = "BiEdLSTM"
 
@@ -171,12 +177,14 @@ class BiEdLSTMModel(DeepModels):
 class CNNModel(DeepModels):
 
     def __init__(self, params):
+
         super(CNNModel, self).__init__(params)
         self.name = "CNN"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
         self.model = Sequential()
+        Data.train_y = Data.train_y.reshape((Data.train_y.shape[0], Data.train_y.shape[1], 1))
         self.model.add(Conv1D(kernels_1, 3, activation='relu', input_shape=(self.horizon, 1)))
         self.model.add(MaxPooling1D(pool_size=2))
         self.model.add(Flatten())
@@ -191,6 +199,7 @@ class CNNModel(DeepModels):
 class GRUModel(DeepModels):
 
     def __init__(self, params):
+
         super(GRUModel, self).__init__(params)
         self.name = "GRU"
 
