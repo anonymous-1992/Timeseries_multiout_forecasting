@@ -54,13 +54,13 @@ def main():
     global Data
     Data = DataUtils(params)
 
-    datareg = DeepReg(params)
+    deepreg = DeepReg(params)
 
-    rmse, rse, corr = datareg.combine()
+    rmse, rse, corr = deepreg.combine()
 
     with open(params.save, 'a+') as f:
 
-        f.write(f"test rmse {rmse:5.4f} | test rae {rse:5.4f} | test corr {rse:5.4f}")
+        f.write(f" combined : test rmse {rmse:5.4f} , test rse {rse:5.4f} , test corr {corr:5.4f} |")
 
 
 
