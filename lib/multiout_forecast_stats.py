@@ -35,7 +35,7 @@ class StatModels:
         return rmse, rse, corr
 
     def save_model(self):
-        file_name = self.name + "pkl"
+        file_name = self.name + ".pkl"
         with open(file_name, 'wb') as file:
             pickle.dump(self.model, file)
 
