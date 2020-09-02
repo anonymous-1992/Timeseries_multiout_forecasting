@@ -168,7 +168,7 @@ def main():
 
     with open(params.save, 'a+') as f:
 
-        f.write(f"test rmse {rmse:5.4f} | test rae {rse:5.4f} | test corr {rse:5.4f}")
+        f.write(f"test rmse {rmse:5.4f} | test rse {rse:5.4f} | test corr {corr:5.4f}")
 
 
 if __name__ == '__main__':
