@@ -188,10 +188,10 @@ class CNNModel(DeepModels):
 
         self.model = Sequential()
         train_y = self.train_y.reshape((self.train_y.shape[0], self.train_y.shape[1], 1))
-        self.model.add(Conv1D(kernels_1, 3, activation='relu', input_shape=(self.horizon, 1)))
+        self.model.add(Conv1D(kernels_1, 3, activation='relu', input_shape=(self.window, 1)))
         self.model.add(MaxPooling1D(pool_size=2))
         self.model.add(Flatten())
-        self.model.add(Dense(kernels_1, activation='relu'))
+        self.model.add(Dense(kernels_2, activation='relu'))
         self.model.add(Dense(self.horizon, activation='linear'))
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
