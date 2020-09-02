@@ -98,6 +98,7 @@ def main():
 
     parser = argparse.ArgumentParser(description='statsmodel Time series multi-output forecasting')
     parser.add_argument('--data_dir', default='data', type=str)
+    parser.add_argument('--name', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
     params = parser.parse_args()
 
