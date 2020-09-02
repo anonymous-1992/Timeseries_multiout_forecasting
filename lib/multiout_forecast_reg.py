@@ -111,6 +111,7 @@ class GPModel(RegModels):
             if rmse < best_val:
                 best_val = rmse
                 self.saved_model = self.model
+                self.train_output = self.model.predict(self.train_x)
 
 
 def create_model(params):

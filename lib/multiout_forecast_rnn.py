@@ -32,6 +32,7 @@ class DeepModels:
         self.name = None
         self.model = None
         self.saved_model = None
+        self.model_output = None
         self.early_stop = kc.EarlyStopping(monitor='mse', patience=20)
 
     def train(self, epoch, kernel_1, kernel_2, dr):
@@ -108,12 +109,14 @@ class LSTMModel(DeepModels):
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(Data.train_x)
 
 
 class BiLSTMModel(DeepModels):
 
         def __init__(self, params):
             super(BiLSTMModel, self).__init__(params)
+            self.name = "BiLSTM"
 
         def train(self, epoch, kernels_1, kernels_2, dropout):
             self.model.add(LSTM(kernels_1, input_shape=(Data.train_x.shape[1], Data.train_x.shape[2])))
@@ -122,12 +125,14 @@ class BiLSTMModel(DeepModels):
             self.model.add(Dropout(rate=dropout))
             self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
             self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
+            self.model_output = self.model.predict(Data.train_x)
 
 
 class EdLSTMModel(DeepModels):
 
     def __init__(self, params):
         super(EdLSTMModel, self).__init__(params)
+        self.name = "EdLSTM"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
@@ -140,12 +145,14 @@ class EdLSTMModel(DeepModels):
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(Data.train_x)
 
 
 class BiEdLSTMModel(DeepModels):
 
     def __init__(self, params):
         super(BiEdLSTMModel, self).__init__(params)
+        self.name = "BiEdLSTM"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
@@ -158,12 +165,14 @@ class BiEdLSTMModel(DeepModels):
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(Data.train_x)
 
 
 class CNNModel(DeepModels):
 
     def __init__(self, params):
         super(CNNModel, self).__init__(params)
+        self.name = "CNN"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
@@ -176,12 +185,14 @@ class CNNModel(DeepModels):
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(Data.train_x)
 
 
 class GRUModel(DeepModels):
 
     def __init__(self, params):
         super(GRUModel, self).__init__(params)
+        self.name = "GRU"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
@@ -192,12 +203,14 @@ class GRUModel(DeepModels):
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(Data.train_x)
 
 
 class BiGRUModel(DeepModels):
 
     def __init__(self, params):
         super(BiGRUModel, self).__init__(params)
+        self.name = "BiGRU"
 
     def train(self, epoch, kernels_1, kernels_2, dropout):
 
@@ -208,6 +221,7 @@ class BiGRUModel(DeepModels):
         self.model.add(Dropout(rate=dropout))
         self.model.compile(loss='mse', optimizer='adam', metrics=['mse'])
         self.model.fit(Data.train_x, Data.train_y, epochs=epoch, callbacks=[self.early_stop])
+        self.model_output = self.model.predict(Data.train_x)
 
 
 def create_models(params):
@@ -235,12 +249,12 @@ def create_models(params):
 def main():
 
     parser = argparse.ArgumentParser(description='Keras Time series multi-output forecasting')
-    parser.add_argument('--n_epoch',  type=list, default=[10, 50, 100, 500, 1000])
-    parser.add_argument('--n_kernels_1', type=list, default=[10, 50, 100, 200])
+    parser.add_argument('--n_epoch',  type=list, default=[10, 50, 100, 500])
+    parser.add_argument('--n_kernels_1', type=list, default=[10, 50, 100])
     parser.add_argument('--n_kernels_2', type=list, default=[10, 50, 100])
-    parser.add_argument('--window', type=int, default=4)
+    parser.add_argument('--window', type=int, default=16)
     parser.add_argument('--horizon', type=int, default=4)
-    parser.add_argument('--dropout', type=list, default=[0.0, 0.1, 0.3])
+    parser.add_argument('--dropout', type=list, default=[0.0])
     parser.add_argument('--data_dir', default='data', type=str)
     parser.add_argument('--name', type=str, required=True)
     parser.add_argument('--save', type=str, required=True)
