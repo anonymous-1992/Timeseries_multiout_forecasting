@@ -34,9 +34,15 @@ class DeepModels:
         self.saved_model = None
         self.model_output = None
         self.early_stop = kc.EarlyStopping(monitor='mse', patience=20)
-        self.train_x, self.train_y = Data.train_x, Data.train_y
-        self.test_x, self.test_y = Data.test_x, Data.test_y
-        self.val_x, self.val_y = Data.val_x, Data.val_y
+
+        self.train_x, self.train_y = Data.train_x.reshape(Data.train_x.shape[0], Data.train_x.shape[1], 1),\
+                                     Data.train_y.reshape(Data.train_y.shape[0], Data.train_y.shape[1], 1)
+
+        self.test_x, self.test_y = Data.test_x.reshape(Data.test_x.shape[0], Data.test_x.shape[1], 1), \
+                                   Data.test_y.reshape(Data.test_y.shape[0], Data.test_y.shape[1], 1)
+
+        self.val_x, self.val_y = Data.val_x.reshape(Data.val_x.shape[0], Data.val_x.shape[1], 1), \
+                                 Data.val_y.reshape(Data.val_y.shape[0], Data.val_y.shape[1], 1)
 
     def train(self, epoch, kernel_1, kernel_2, dr):
         pass
@@ -276,12 +282,6 @@ def main():
     global Data
 
     Data = data_util.DataUtils(params)
-
-    Data.train_x = Data.train_x.reshape((Data.train_x.shape[0], Data.train_x.shape[1], 1))
-
-    Data.val_x = Data.val_x.reshape((Data.val_x.shape[0], Data.val_x.shape[1], 1))
-
-    Data.test_x = Data.test_x.reshape((Data.test_x.shape[0], Data.test_x.shape[1], 1))
 
     model = create_models(params)
 
