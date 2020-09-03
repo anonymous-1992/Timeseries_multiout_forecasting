@@ -35,14 +35,11 @@ class DeepModels:
         self.model_output = None
         self.early_stop = kc.EarlyStopping(monitor='mse', patience=20)
 
-        self.train_x, self.train_y = Data.train_x.reshape(Data.train_x.shape[0], Data.train_x.shape[1], 1),\
-                                     Data.train_y.reshape(Data.train_y.shape[0], Data.train_y.shape[1], 1)
+        self.train_x, self.train_y = Data.train_x.reshape(Data.train_x.shape[0], Data.train_x.shape[1], 1), Data.train_y
 
-        self.test_x, self.test_y = Data.test_x.reshape(Data.test_x.shape[0], Data.test_x.shape[1], 1), \
-                                   Data.test_y.reshape(Data.test_y.shape[0], Data.test_y.shape[1], 1)
+        self.test_x, self.test_y = Data.test_x.reshape(Data.test_x.shape[0], Data.test_x.shape[1], 1), Data.test_y
 
-        self.val_x, self.val_y = Data.val_x.reshape(Data.val_x.shape[0], Data.val_x.shape[1], 1), \
-                                 Data.val_y.reshape(Data.val_y.shape[0], Data.val_y.shape[1], 1)
+        self.val_x, self.val_y = Data.val_x.reshape(Data.val_x.shape[0], Data.val_x.shape[1], 1), Data.val_y
 
     def train(self, epoch, kernel_1, kernel_2, dr):
         pass
