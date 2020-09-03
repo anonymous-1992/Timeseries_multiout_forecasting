@@ -111,7 +111,6 @@ def main():
     parser.add_argument('--p_ls', default=p_values)
     parser.add_argument('--q_ls', default=q_values)
     parser.add_argument('--d_ls', default=d_values)
-    parser.add_argument('--name', type=str, required=True)
     params = parser.parse_args()
 
     model = create_model(params)
