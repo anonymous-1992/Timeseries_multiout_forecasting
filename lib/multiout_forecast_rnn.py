@@ -85,7 +85,7 @@ class DeepModels:
 
         labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
 
-        output = model.model.predict(in_seq)
+        output = model.predict(in_seq)
 
         output = np.array(output)
 
