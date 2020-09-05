@@ -37,7 +37,7 @@ class DeepReg:
 
         b = self.train_y.reshape(self.train_y.shape[0] * self.train_y.shape[1], )
 
-        m, c = np.linalg.lstsq(A, b, rcond=None)[0]
+        m = np.linalg.lstsq(A, b, rcond=None)
 
         print(m)
 
