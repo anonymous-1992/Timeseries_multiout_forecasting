@@ -48,7 +48,7 @@ class DeepReg:
         deep_pred = deep_pred.reshape(deep_pred.shape[0] * deep_pred.shape[1], )
         reg_pred = reg_pred.reshape(reg_pred.shape[0] * reg_pred.shape[1], )
 
-        final_pred = m[0] * deep_pred + m[1] * reg_pred + c
+        final_pred = m[0] * deep_pred + m[1] * reg_pred
 
         final_pred = np.array(final_pred)
 
