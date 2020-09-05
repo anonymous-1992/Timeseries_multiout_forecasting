@@ -27,6 +27,12 @@ class DeepReg:
         deep_pred = self.deep_model.predict(self.deep_train_x)
         reg_pred = self.reg_model.predict(self.train_x)
 
+        deep_pred = np.array(deep_pred)
+        reg_pred = np.array(reg_pred)
+
+        deep_pred = deep_pred.reshape(deep_pred.shape[0] * deep_pred.shape[1], )
+        reg_pred = reg_pred.reshape(reg_pred.shape[0] * reg_pred.shape[1], )
+
         A = np.vstack((deep_pred, reg_pred)).T
 
         print(A.shape)
@@ -39,6 +45,12 @@ class DeepReg:
 
         deep_pred = self.deep_model.predict(self.deep_test_x)
         reg_pred = self.reg_model.predict(self.test_x)
+
+        deep_pred = np.array(deep_pred)
+        reg_pred = np.array(reg_pred)
+
+        deep_pred = deep_pred.reshape(deep_pred.shape[0] * deep_pred.shape[1], )
+        reg_pred = reg_pred.reshape(reg_pred.shape[0] * reg_pred.shape[1], )
 
         A = np.vstack((deep_pred, reg_pred)).T
 
