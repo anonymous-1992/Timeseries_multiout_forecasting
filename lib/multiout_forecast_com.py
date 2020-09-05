@@ -2,7 +2,7 @@ import argparse
 import tensorflow as tf
 import pickle
 import numpy as np
-import eval_metrics as EvalMetrics
+from eval_metrics import EvalMetrics
 from dataset import DataUtils
 
 
