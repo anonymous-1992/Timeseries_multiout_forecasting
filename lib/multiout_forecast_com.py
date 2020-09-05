@@ -29,7 +29,11 @@ class DeepReg:
 
         A = np.vstack((deep_pred, reg_pred)).T
 
+        print(A.shape)
+
         b = self.train_y.reshape(self.train_y.shape[0] * self.train_y.shape[1], )
+
+        print(b.shape)
 
         m, c = np.linalg.lstsq(A, b, rcond=None)[0]
 
