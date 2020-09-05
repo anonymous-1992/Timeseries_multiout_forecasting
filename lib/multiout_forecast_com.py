@@ -50,10 +50,6 @@ class DeepReg:
 
         final_pred = m[0] * deep_pred + m[1] * reg_pred
 
-        final_pred = np.array(final_pred)
-
-        final_pred = final_pred.reshape(final_pred.shape[0] * final_pred.shape[1], )
-
         out_seq = self.test_y
 
         labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
