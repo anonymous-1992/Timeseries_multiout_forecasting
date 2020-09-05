@@ -29,7 +29,9 @@ class DeepReg:
 
         A = np.vstack((deep_pred, reg_pred)).T
 
-        m, c = np.linalg.lstsq(A, self.test_y, rcond=None)[0]
+        b = self.train_y.reshape(self.train_y.shape[0] * self.train_y.shape[1], )
+
+        m, c = np.linalg.lstsq(A, b, rcond=None)[0]
 
         deep_pred = self.deep_model.predict(self.deep_test_x)
         reg_pred = self.reg_model.predict(self.test_x)
