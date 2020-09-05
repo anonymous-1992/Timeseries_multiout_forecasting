@@ -20,7 +20,6 @@ class DeepReg:
         self.deep_train_x = self.train_x.reshape(self.train_x.shape[0], self.train_x.shape[1], 1)
 
         self.test_x, self.test_y = Data.test_x, Data.test_y
-        self.test_y = self.test_y.reshape(self.test_y.shape[0] * self.test_x.shape[1], )
         self.deep_test_x = self.test_x.reshape(self.test_x.shape[0], self.test_x.shape[1], 1)
 
     def combine(self):
@@ -57,7 +56,11 @@ class DeepReg:
 
         final_pred = m * A + c
 
-        eval = EvalMetrics(self.test_y, final_pred)
+        out_seq = self.test_y
+
+        labels = out_seq.reshape(out_seq.shape[0] * out_seq.shape[1], )
+
+        eval = EvalMetrics(labels, final_pred)
 
         rmse = eval.val_rmse()
         rse = eval.val_rse()
