@@ -17,10 +17,10 @@ class DeepReg:
             self.reg_model = pickle.load(file)
 
         self.train_x, self.train_y = Data.train_x, Data.train_y
-        self.deep_train_x = self.train_x.reshape(self.train_x[0], self.train_x[1], 1)
+        self.deep_train_x = self.train_x.reshape(self.train_x.shape[0], self.train_x.shape[1], 1)
 
         self.test_x, self.test_y = Data.test_x, Data.test_y
-        self.deep_test_x = self.test_x.reshape(self.test_x[0], self.test_x[1], 1)
+        self.deep_test_x = self.test_x.reshape(self.test_x.shape[0], self.test_x.shape[1], 1)
 
     def combine(self):
 
