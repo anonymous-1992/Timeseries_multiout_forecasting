@@ -16,17 +16,25 @@ class DeepReg:
         with open(self.reg_model_path, 'rb') as file:
             self.reg_model = pickle.load(file)
 
-        self.test_x, self.test_y = params.Data.test_x, params.Data.test_y
+        self.train_x, self.train_y = Data.train_x, Data.train_y
+        self.deep_train_x = self.train_x.reshape(self.train_x[0], self.train_x[1], 1)
+
+        self.test_x, self.test_y = Data.test_x, Data.test_y
         self.deep_test_x = self.test_x.reshape(self.test_x[0], self.test_x[1], 1)
 
     def combine(self):
+
+        deep_pred = self.deep_model.predict(self.deep_train_x)
+        reg_pred = self.reg_model.predict(self.train_x)
+
+        A = np.vstack((deep_pred, reg_pred)).T
+
+        m, c = np.linalg.lstsq(A, self.test_y, rcond=None)[0]
 
         deep_pred = self.deep_model.predict(self.deep_test_x)
         reg_pred = self.reg_model.predict(self.test_x)
 
         A = np.vstack((deep_pred, reg_pred)).T
-
-        m, c = np.linalg.lstsq(A, self.test_y, rcond=None)[0]
 
         final_pred = m * A + c
 
