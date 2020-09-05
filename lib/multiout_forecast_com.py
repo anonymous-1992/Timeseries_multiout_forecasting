@@ -2,7 +2,7 @@ import argparse
 import tensorflow as tf
 import pickle
 import numpy as np
-import eval_metrics as eval_metrics
+import eval_metrics as EvalMetrics
 from dataset import DataUtils
 
 
@@ -56,7 +56,7 @@ class DeepReg:
 
         final_pred = m * A + c
 
-        eval = eval_metrics(self.test_y, final_pred)
+        eval = EvalMetrics(self.test_y, final_pred)
 
         rmse = eval.val_rmse()
         rse = eval.val_rse()
