@@ -111,8 +111,17 @@ def main():
     parser.add_argument('--data_dir', default='data', type=str)
     parser.add_argument('--window', type=int, default=16)
     parser.add_argument('--horizon', type=int, default=4)
-    parser.add_argument('--deep_model_path', type=str, required=True)
-    parser.add_argument('--reg_model_path', type=str, required=True)
+    parser.add_argument('--LSTM', type=str, default='LSTM.h5')
+    parser.add_argument('--BiLSTM', type=str, default='BiLSTM.h5')
+    parser.add_argument('--EdLSTM', type=str, default='EdLSTM.h5')
+    parser.add_argument('--BiEdLSTM', type=str, default='BiEdLSTM.h5')
+    parser.add_argument('--CNN', type=str, default='CNN.h5')
+    parser.add_argument('--GRU', type=str, default='GRU.h5')
+    parser.add_argument('--BiGRU', type=str, default='BiGRU.h5')
+    parser.add_argument('--LR', type=str, default='LR.pkl')
+    parser.add_argument('--SVR', type=str, default='SVR.pkl')
+    parser.add_argument('--Lasso', type=str, default='Lasso.pkl')
+    parser.add_argument('--GP', type=str, default='GP.pkl')
     parser.add_argument('--save', type=str, required=True)
 
     params = parser.parse_args()
@@ -126,7 +135,7 @@ def main():
 
     with open(params.save, 'a+') as f:
 
-        f.write(f" combined : test rmse {rmse:5.4f} , test rse {rse:5.4f} , test corr {corr:5.4f} |")
+        f.write(f"| combined : test rmse {rmse:5.4f} , test rse {rse:5.4f} , test corr {corr:5.4f} |\n")
 
 
 if __name__ == '__main__':

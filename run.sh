@@ -11,5 +11,6 @@ python lib/multiout_forecast_reg.py --name SVR --save results.txt
 python lib/multiout_forecast_reg.py --name Lasso --save results.txt
 python lib/multiout_forecast_reg.py --name GP --save results.txt
 
-python lib/multiout_forecast_stats.py --name ARIMA --save results.txt
-python lib/multiout_forecast_stats.py --name VAR --save results.txt
+python lib/multiout_forecast_com.py --save results.txt
+
+
