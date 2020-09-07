@@ -107,7 +107,7 @@ class DeepReg:
                        self.LR_pred,
                        self.SVR_pred,
                        self.Lasso_pred,
-                       self.GP_pred)).T
+                       self.GP_pred))
 
         final_pred = np.dot(m, A)
 
