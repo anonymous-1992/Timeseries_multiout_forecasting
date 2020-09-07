@@ -44,21 +44,38 @@ class DeepReg:
         deep_x, x = (self.deep_train_x, self.train_x) if set_type == 'train' \
             else (self.deep_test_x, self.test_x)
 
-        sh_1, sh_2 = (self.train_x.shape[0], self.train_x.shape[1]) if set_type == 'train' \
-            else (self.test_x[0], self.test_x[1])
+        self.LSTM_pred = np.array(self.LSTM.predict(deep_x))
+        self.LSTM_pred = self.LSTM_pred.reshape(self.LSTM_pred.shape[0] * self.LSTM_pred.shape[1])
 
-        self.LSTM_pred = np.array(self.LSTM.predict(deep_x)).reshape(sh_1 * sh_2, )
-        self.BiLSTM_pred = np.array(self.BiLSTM.predict(deep_x)).reshape(sh_1 * sh_2, )
-        self.EdLSTM_pred = np.array(self.EdLSTM.predict(deep_x)).reshape(sh_1 * sh_2, )
-        self.BiEdLSTM_pred = np.array(self.BiEdLSTM.predict(deep_x)).reshape(sh_1 * sh_2, )
-        self.CNN_pred = np.array(self.CNN.predict(deep_x)).reshape(sh_1 * sh_2, )
-        self.GRU_pred = np.array(self.GRU.predict(deep_x)).reshape(sh_1 * sh_2, )
-        self.BiGRU_pred = np.array(self.BiGRU.predict(deep_x)).reshape(sh_1 * sh_2, )
+        self.BiLSTM_pred = np.array(self.BiLSTM.predict(deep_x))
+        self.BiLSTM_pred = self.BiLSTM_pred.reshape(self.BiLSTM_pred.shape[0] * self.BiLSTM_pred.shape[1])
 
-        self.LR_pred = np.array(self.LR.predict(x)).reshape(sh_1 * sh_2, )
-        self.SVR_pred = np.array(self.SVR.predict(x)).reshape(sh_1 * sh_2, )
-        self.Lasso_pred = np.array(self.Lasso.predict(x)).reshape(sh_1 * sh_2, )
-        self.GP_pred = np.array(self.GP.predict(x)).reshape(sh_1 * sh_2, )
+        self.EdLSTM_pred = np.array(self.EdLSTM.predict(deep_x))
+        self.EdLSTM_pred = self.BiLSTM_pred.reshape(self.EdLSTM_pred.shape[0] * self.EdLSTM_pred.shape[1])
+
+        self.BiEdLSTM_pred = np.array(self.BiEdLSTM.predict(deep_x))
+        self.BiEdLSTM_pred = self.BiEdLSTM_pred.reshape(self.BiEdLSTM_pred.shape[0] * self.BiEdLSTM_pred.shape[1])
+
+        self.CNN_pred = np.array(self.CNN.predict(deep_x))
+        self.CNN_pred = self.CNN_pred.reshape(self.CNN_pred.shape[0] * self.CNN_pred.shape[1])
+
+        self.GRU_pred = np.array(self.GRU.predict(deep_x))
+        self.GRU_pred = self.GRU_pred.reshape(self.GRU_pred.shape[0] * self.GRU_pred.shape[1])
+
+        self.BiGRU_pred = np.array(self.BiGRU.predict(deep_x))
+        self.BiGRU_pred = self.BiGRU_pred.reshape(self.BiGRU_pred.shape[0] * self.BiGRU_pred.shape[1])
+
+        self.LR_pred = np.array(self.LR.predict(x))
+        self.LR_pred = self.LR_pred.reshape(self.LR_pred.shape[0] * self.LR_pred.shape[1], )
+
+        self.SVR_pred = np.array(self.SVR.predict(x))
+        self.SVR_pred = self.SVR_pred.reshape(self.SVR_pred.shape[0] * self.SVR_pred.shape[1])
+
+        self.Lasso_pred = np.array(self.Lasso.predict(x))
+        self.Lasso_pred = self.Lasso_pred.reshape(self.Lasso_pred.shape[0] * self.Lasso_pred.shape[1])
+
+        self.GP_pred = np.array(self.GP.predict(x))
+        self.GP_pred = self.GP_pred.reshape(self.GP_pred.shape[0] * self.GP_pred.shape[1])
 
     def combine(self):
 
