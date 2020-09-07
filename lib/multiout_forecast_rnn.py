@@ -288,7 +288,7 @@ def main():
 
     with open(params.save, 'a+') as f:
 
-        f.write(f"| {model.name} : test rmse {rmse:5.4f} , test rse {rse:5.4f} , test corr {corr:5.4f} |\n")
+        f.write(f"| {model.name} : {params.horizon} test rmse {rmse:5.4f} , test rse {rse:5.4f} , test corr {corr:5.4f} |\n")
 
 
 if __name__ == "__main__":

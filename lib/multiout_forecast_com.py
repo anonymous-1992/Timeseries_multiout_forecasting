@@ -152,7 +152,7 @@ def main():
 
     with open(params.save, 'a+') as f:
 
-        f.write(f"| combined : test rmse {rmse:5.4f} , test rse {rse:5.4f} , test corr {corr:5.4f} |\n")
+        f.write(f"| combined : {params.horizon} test rmse {rmse:5.4f} , test rse {rse:5.4f} , test corr {corr:5.4f} |\n")
 
 
 if __name__ == '__main__':
