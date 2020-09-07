@@ -126,6 +126,7 @@ class GPModel(RegModels):
                 best_val = rmse
                 self.saved_model = self.model
                 self.train_output = self.model.predict(self.train_x)
+                self.save_model()
 
 
 
